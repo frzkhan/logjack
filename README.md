@@ -178,10 +178,87 @@ Use this when you’re done recording logs or want to restart with a new set of 
 
 ## `mcp` — run the MCP server
 
-Starts the Model Context Protocol (MCP) server over stdio, exposing two tools: `logjack_grab` and `logjack_status`.
+Starts the Model Context Protocol (MCP) server over stdio, exposing two tools:
+
+- **`logjack_grab`** — Grab a time-windowed snapshot from your buffers (same as `logjack grab`). Parameters: `lastSeconds`, optional `services`, `level`, `pattern`, `format`.
+- **`logjack_status`** — Check if logjack is running and list watched sources (same as `logjack status`).
 
 ```bash
 logjack mcp
 ```
 
-This is primarily for MCP-compatible clients (e.g. AI tools) to query log snapshots and status programmatically. You generally won’t use this directly in day-to-day terminal work unless you’re wiring logjack into an MCP client.
+This is for MCP-compatible clients (e.g. Cursor, Claude Desktop) so the AI can query your local logs without you running the CLI yourself.
+
+---
+
+### Using logjack MCP in Cursor (Claude / AI)
+
+**Manual config (Cursor / Claude Code)** — Add this to your MCP config (Cursor Settings → MCP → Edit config, or `.cursor/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "logjack": {
+      "command": "npx",
+      "args": ["logjack", "mcp"]
+    }
+  }
+}
+```
+
+1. **Install logjack** (globally or in your project):
+   ```bash
+   npm install -g logjack
+   # or: npx logjack (no install, use npx each time)
+   ```
+
+2. **Add the MCP server in Cursor:**
+   - Open **Cursor Settings** → **MCP** (or **Features** → **MCP**).
+   - Add a server entry for logjack.
+
+   **Option A — Global config (recommended)**  
+   Edit your user MCP config (e.g. **Cursor Settings → MCP → Edit config**) and add:
+
+   ```json
+   {
+     "mcpServers": {
+       "logjack": {
+         "command": "npx",
+         "args": ["-y", "logjack", "mcp"]
+       }
+     }
+   }
+   ```
+
+   If logjack is installed globally, you can use:
+
+   ```json
+   {
+     "mcpServers": {
+       "logjack": {
+         "command": "logjack",
+         "args": ["mcp"]
+       }
+     }
+   }
+   ```
+
+   **Option B — Project-only**  
+   Create or edit `.cursor/mcp.json` in your repo:
+
+   ```json
+   {
+     "mcpServers": {
+       "logjack": {
+         "command": "npx",
+         "args": ["-y", "logjack", "mcp"]
+       }
+     }
+   }
+   ```
+
+3. **Restart Cursor** (or reload the MCP servers) so it picks up the new server.
+
+4. **Use in chat:** In a Cursor chat (with Claude or another model), you can ask things like “grab the last 5 minutes of logs” or “is logjack running?” — the model will call `logjack_grab` or `logjack_status` for you.
+
+**Note:** Start logjack’s tailing first with `logjack start --pm2` or `logjack start --tail "name:/path/to/log"` so there is data to grab. The MCP server only reads from the existing buffers; it does not start the worker.
