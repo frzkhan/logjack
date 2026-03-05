@@ -4,15 +4,24 @@
   "description": "Flight recorder for your local dev environment. Capture a rolling window of logs across processes.",
   "type": "module",
   "bin": {
-    "logjack": "./dist/cli.js"
+    "logjack": "dist/cli.js"
   },
   "main": "./dist/cli.js",
-  "files": ["dist"],
-  "keywords": ["cli", "logs", "debugging", "mcp", "pm2", "developer-tools"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "cli",
+    "logs",
+    "debugging",
+    "mcp",
+    "pm2",
+    "developer-tools"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/logjack"
+    "url": "git+https://github.com/yourusername/logjack.git"
   },
   "homepage": "https://github.com/yourusername/logjack",
   "engines": {
