@@ -1,0 +1,39 @@
+{
+  "name": "logjack",
+  "version": "0.1.0",
+  "description": "Flight recorder for your local dev environment. Capture a rolling window of logs across processes.",
+  "type": "module",
+  "bin": {
+    "logjack": "./dist/cli.js"
+  },
+  "main": "./dist/cli.js",
+  "files": ["dist"],
+  "keywords": ["cli", "logs", "debugging", "mcp", "pm2", "developer-tools"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/logjack"
+  },
+  "homepage": "https://github.com/yourusername/logjack",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "start": "node dist/cli.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.0",
+    "commander": "^14.0.1",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}
