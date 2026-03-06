@@ -1,6 +1,6 @@
 {
   "name": "logjack",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Flight recorder for your local dev environment. Capture a rolling window of logs across processes.",
   "type": "module",
   "bin": {
