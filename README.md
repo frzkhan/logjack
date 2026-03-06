@@ -85,6 +85,15 @@ logjack grab --last 300 --service main
 
 logjack grab --last 300 --service main --service api
 # Only "main" and "api"
+
+logjack grab --from 01:00 --to 02:00
+# Everything between 1 AM and 2 AM today
+
+logjack grab --from "2024-06-15T10:30:00" --to "2024-06-15T11:00:00"
+# Specific date/time range
+
+logjack grab --from 09:00
+# From 9 AM today until now
 ```
 
 So you can “start with one log, then [after restart] another,” and then grab each service separately with `--service <name>`.
@@ -101,11 +110,24 @@ logjack grab [options]
 
 **Options**
 
-- `--last <seconds>`  
-  Time window to grab, in seconds.  
-  - Default: `60` seconds  
-  - Max: `3600` seconds  
+- `--last <seconds>`
+  Time window to grab, in seconds.
+  - Default: `60` seconds
+  - Max: `3600` seconds
   Use this to say “give me the last 5 minutes” with `--last 300`.
+  Ignored when `--from` or `--to` is specified.
+
+- `--from <time>`
+  Start of the time range to grab.
+  Accepted formats:
+  - Time only (today's date assumed): `01:00`, `14:30`, `09:05:30`
+  - Date + time: `2024-06-15T10:30:00` or `2024-06-15 10:30:00`
+  - Date only (midnight): `2024-06-15`
+  If `--from` is given without `--to`, the window ends at now.
+
+- `--to <time>`
+  End of the time range to grab. Same format as `--from`.
+  If `--to` is given without `--from`, the window starts `--last` seconds before `--to`.
 
 - `--service <name>` (repeatable)  
   Restrict results to one or more service names (the `name` you used in `--tail`).  

@@ -1,11 +1,13 @@
 import fsp from "node:fs/promises";
 import path from "node:path";
-import { BUFFERS_DIR, LEVEL_PRIORITY } from "./constants.js";
+import { BUFFERS_DIR, DEFAULT_LAST_SECONDS, LEVEL_PRIORITY } from "./constants.js";
 import { RollingBuffer } from "./buffer.js";
 import type { LogEntry, LogLevel } from "./types.js";
 
 export interface GrabOptions {
-  lastSeconds: number;
+  lastSeconds?: number;
+  fromMs?: number;
+  toMs?: number;
   services?: string[];
   level?: Exclude<LogLevel, "unknown">;
   pattern?: string;
@@ -64,8 +66,8 @@ async function discoverServices(): Promise<string[]> {
 }
 
 export async function grabEntries(options: GrabOptions, now = Date.now()): Promise<GrabResult> {
-  const fromMs = now - options.lastSeconds * 1000;
-  const toMs = now;
+  const toMs = options.toMs ?? now;
+  const fromMs = options.fromMs ?? (toMs - (options.lastSeconds ?? DEFAULT_LAST_SECONDS) * 1000);
   const matcher = buildMatcher(options.pattern);
   const selectedServices = options.services?.length ? options.services : await discoverServices();
 
@@ -88,7 +90,7 @@ export async function grabEntries(options: GrabOptions, now = Date.now()): Promi
   return {
     entries: allEntries,
     serviceCount: new Set(allEntries.map((entry) => entry.service)).size,
-    windowSeconds: options.lastSeconds
+    windowSeconds: Math.round((toMs - fromMs) / 1000)
   };
 }
 

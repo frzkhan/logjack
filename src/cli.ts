@@ -33,6 +33,8 @@ program
   .command("grab")
   .description("Grab a time-windowed snapshot of logs")
   .option("--last <seconds>", "Window in seconds", parseIntOption)
+  .option("--from <time>", "Start time: HH:MM, HH:MM:SS, or YYYY-MM-DDTHH:MM:SS")
+  .option("--to <time>", "End time: HH:MM, HH:MM:SS, or YYYY-MM-DDTHH:MM:SS")
   .option("--service <name>", "Filter to service", (value, prev: string[]) => {
     prev.push(value);
     return prev;
