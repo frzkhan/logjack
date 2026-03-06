@@ -21,9 +21,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/logjack.git"
+    "url": "git+https://github.com/frzkhan/logjack.git"
   },
-  "homepage": "https://github.com/yourusername/logjack",
+  "homepage": "https://github.com/frzkhan/logjack",
   "engines": {
     "node": ">=18.0.0"
   },
